@@ -1,9 +1,5 @@
 # Teststrategie
 
-Dieses Dokument enthält die Lösungen zu den Übungen aus [`m450-gitlab/m450/Unterlagen/teststrategie/UEBUNGEN.md`](file:///projects/m450/m450-gitlab/m450/Unterlagen/teststrategie/UEBUNGEN.md).
-
----
-
 ## Übung 1: Rabattregeln Verkaufssoftware
 
 ### Beschreibung
