@@ -1,0 +1,30 @@
+<div class="card my-5">
+  <div class="card-body">
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="name">Name</label>
+        <input type="text" [(ngModel)]="student.name" class="form-control" id="name" name="name" placeholder="Name eingeben"
+               required #name="ngModel">
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger mt-1">
+          <small *ngIf="name.errors?.['required']">Name ist ein Pflichtfeld.</small>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="email">E-Mail</label>
+        <input type="email" [(ngModel)]="student.email" class="form-control" id="email" name="email" placeholder="E-Mail Adresse eingeben"
+               required email #email="ngModel">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger mt-1">
+          <small *ngIf="email.errors?.['required']">E-Mail ist ein Pflichtfeld.</small>
+          <small *ngIf="email.errors?.['email']">Bitte eine gültige E-Mail Adresse eingeben.</small>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info">Speichern</button>
+    </form>
+  </div>
+</div>
