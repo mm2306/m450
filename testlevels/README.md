@@ -82,21 +82,7 @@
 
 #### **2. Hierarchie und Abhängigkeiten**
 
-```
-                    +------------------------------------+
-                    |          Testing Approach          |  (Strategie & Philosophie, z. B. TDD / Shift-Left)
-                    +------------------------------------+
-                                      |
-                                      v
-                    +------------------------------------+
-                    |           Testing Levels           |  (Stufenmodell / Zeitachse: Unit -> Acceptance)
-                    +------------------------------------+
-                                      |
-                                      v
-                    +------------------------------------+
-                    |  Types, Techniques & Tactics       |  (Konkrete Methoden: White-Box, Black-Box, Performance)
-                    +------------------------------------+
-```
+**Testing Approach** (Strategie / Gedanke) -> **Testing Levels** (Stufenmodell) -> **Types, Techniques & Tactics** (Konkrete Metoden)
 
 * **Zusammenhang**: Der *Testing Approach* legt die Strategie fest. Auf jedem *Testing Level* werden spezifische *Testing Types, Techniques & Tactics* eingesetzt.
 * **Beispiel**:

@@ -4,8 +4,6 @@ import ch.schule.Booking;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 
 /**
  * Tests für die Klasse Booking.
@@ -16,12 +14,21 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class BookingTests
 {
 	/**
-	 * Tests f�r die Erzeugung von Buchungen.
+	 * Tests für die Erzeugung von Buchungen.
 	 */
 	@Test
 	public void testInitialization()
 	{
-		fail("toDo");
+		int date = 100;
+		long amount = 50000;
+		Booking booking = new Booking(date, amount);
+
+		assertEquals(date, booking.getDate());
+		assertEquals(amount, booking.getAmount());
+
+		Booking negativeBooking = new Booking(10, -25000);
+		assertEquals(10, negativeBooking.getDate());
+		assertEquals(-25000, negativeBooking.getAmount());
 	}
 
 	/**
@@ -30,6 +37,8 @@ public class BookingTests
 	@Test
 	public void testPrint()
 	{
-		fail("toDo");
+		Booking booking = new Booking(100, 50000);
+		booking.print(10000);
+		booking.print(0);
 	}
 }

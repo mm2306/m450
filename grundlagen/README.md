@@ -40,7 +40,7 @@ Ein Online-Rezeptbuch speichert Rezepte perfekt, erlaubt aber nur die Suche nach
 
 ### **Aufgabe 3**
 
-Die Implementierung inkl. Tests befinden sich in [`Preisberechnung.java`](file:///projects/m450/grundlagen/Preisberechnung.java).
+Die Implementierung inkl. Tests befinden sich in [Preisberechnung.java](Preisberechnung.java).
 
 Ausführung:
 ```bash
