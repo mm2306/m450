@@ -5,20 +5,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressComparatorTest {
 
-    private Address addr1;
-    private Address addr2;
-    private Address addr3;
-    private Address addr4;
+    private Address addr1; // Anna Bauer (ID 1)
+    private Address addr2; // Zoe Bauer (ID 2)
+    private Address addr3; // Bob Anders (ID 3)
+    private Address addr4; // Anna Bauer (ID 4)
+    private AddressComparator comparator;
 
     @BeforeEach
     void setUp() {
         Date now = new Date();
+        comparator = new AddressComparator();
 
         addr1 = new Address(1, "Anna", "Bauer", "0791111111", now);
         addr2 = new Address(2, "Zoe", "Bauer", "0792222222", now);
@@ -27,34 +31,35 @@ class AddressComparatorTest {
     }
 
     @Test
-    @DisplayName("Default comparison sorts by lastname, then firstname, then id")
-    void testDefaultComparator() {
-        AddressComparator comparator = new AddressComparator();
+    @DisplayName("Sortiert Adressen korrekt: Nachname, Vorname, ID")
+    void testSortsAddressesCorrectly() {
+        // Unsortierte Liste erstellen
+        List<Address> addresses = Arrays.asList(addr2, addr4, addr1, addr3);
 
-        // Adam comes before Bern
-        assertTrue(comparator.compare(addr3, addr1) < 0);
-        assertTrue(comparator.compare(addr1, addr3) > 0);
+        // Mit dem Comparator sortieren
+        addresses.sort(comparator);
 
-        // Same lastname ("Bern"), Anna comes before Zoe
-        assertTrue(comparator.compare(addr1, addr2) < 0);
+        // Erwartete Reihenfolge:
+        // 1. Bob Anders (Nachname A)
+        // 2. Anna Bauer ID 1 (Nachname B, Vorname A, ID 1)
+        // 3. Anna Bauer ID 4 (Nachname B, Vorname A, ID 4)
+        // 4. Zoe Bauer ID 2 (Nachname B, Vorname Z)
+        List<Address> expectedOrder = List.of(addr3, addr1, addr4, addr2);
 
-        // Same lastname ("Bern") & firstname ("Anna"), id 1 comes before id 4
-        assertTrue(comparator.compare(addr1, addr4) < 0);
-
-        // Same object returns 0
-        assertEquals(0, comparator.compare(addr1, addr1));
+        assertIterableEquals(expectedOrder, addresses);
     }
 
     @Test
-    @DisplayName("Test null safety in AddressComparator")
-    void testNullHandling() {
-        AddressComparator comparator = new AddressComparator();
-
-        assertTrue(comparator.compare(null, addr1) < 0);
-        assertTrue(comparator.compare(addr1, null) > 0);
-        assertEquals(0, comparator.compare(null, null));
-
+    @DisplayName("Null-Werte werden an den Anfang sortiert (nullsFirst)")
+    void testSortsWithNullValues() {
         Address nullFieldsAddress = new Address(5, null, null, null, null);
-        assertTrue(comparator.compare(nullFieldsAddress, addr1) < 0);
+        List<Address> addresses = Arrays.asList(addr1, null, nullFieldsAddress);
+
+        addresses.sort(comparator);
+
+        // nullsFirst schiebt 'null' ganz nach vorne, danach Adressen mit null-Feldern
+        List<Address> expectedOrder = List.of(null, nullFieldsAddress, addr1);
+
+        assertIterableEquals(expectedOrder, addresses);
     }
 }
