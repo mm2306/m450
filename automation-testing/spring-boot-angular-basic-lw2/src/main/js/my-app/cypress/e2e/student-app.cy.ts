@@ -1,12 +1,11 @@
 describe('Student Management App E2E Tests', () => {
   beforeEach(() => {
-    // Navigate to homepage / student list
-    cy.visit('http://localhost:4200/students');
+    cy.visit('/students');
   });
 
   it('should display initial student list table with correct headers', () => {
-    cy.get('h2').should('contain.text', 'Students');
-    cy.get('table').should('exist');
+    cy.contains('a', 'List Students').should('be.visible');
+    cy.get('table').should('be.visible');
     cy.get('table thead tr th').eq(0).should('contain.text', '#');
     cy.get('table thead tr th').eq(1).should('contain.text', 'Name');
     cy.get('table thead tr th').eq(2).should('contain.text', 'Email');
@@ -14,10 +13,9 @@ describe('Student Management App E2E Tests', () => {
 
   it('should navigate to Add Student form and submit a new student', () => {
     // Click navigation link to add student
-    cy.contains('Add Student').click();
+    cy.contains('a', 'Add Students').click();
 
-    // Verify URL change
-    cy.url().should('include', '/addstudent');
+    cy.url().should('include', '/addstudents');
 
     // Fill form fields
     cy.get('input#name').type('Cypress Automated User');
@@ -35,7 +33,7 @@ describe('Student Management App E2E Tests', () => {
   });
 
   it('should validate invalid input and keep submit button disabled', () => {
-    cy.contains('Add Student').click();
+    cy.contains('a', 'Add Students').click();
 
     // Type invalid email
     cy.get('input#name').type('Test User');

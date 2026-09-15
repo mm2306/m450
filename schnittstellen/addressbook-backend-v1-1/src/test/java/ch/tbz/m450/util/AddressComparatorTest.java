@@ -33,7 +33,6 @@ class AddressComparatorTest {
     @Test
     @DisplayName("Sortiert Adressen korrekt: Nachname, Vorname, ID")
     void testSortsAddressesCorrectly() {
-        // Unsortierte Liste erstellen
         List<Address> addresses = Arrays.asList(addr2, addr4, addr1, addr3);
 
         // Mit dem Comparator sortieren
