@@ -8,44 +8,40 @@ Lösungen zu den Übungen aus `UEBUNGEN.md`.
 * **Node.js** und **npm** für Cypress E2E-Tests (`npm install` lädt den Cypress-Binary automatisch)
 * **k6** oder **Docker** für Load-Tests (`make test-load` nutzt Docker als Fallback)
 
-k6 installieren (Fedora):
-
-```bash
-sudo dnf install https://dl.k6.io/rpm/repo.rpm
-sudo dnf install k6
-```
-
 ## Setup
-Backend (Spring Boot) & Frontend (Angular) starten:
+
+Alle Befehle aus dem Ordner `automation-testing` ausführen. Backend und Frontend jeweils in einem **eigenen Terminal** starten.
+
+### Backend starten (Port 8081)
 
 ```bash
-# Backend (Port 8081)
-cd spring-boot-angular-basic-lw2
-mvn spring-boot:run
-
-# Frontend (Port 4200)
-cd spring-boot-angular-basic-lw2/src/main/js/my-app
-npm install && npm start
+make start-backend
+# oder: cd spring-boot-angular-basic-lw2 && mvn spring-boot:run
 ```
+
+Warten bis `Started StudentApplication` erscheint. API erreichbar unter:
+
+**http://localhost:8081/students**
+
+### Frontend starten (Port 4200)
+
+```bash
+cd spring-boot-angular-basic-lw2/src/main/js/my-app
+npm install    # nur beim ersten Mal nötig
+npm start
+```
+
+Warten bis `Compiled successfully` erscheint. App im Browser öffnen:
+
+**http://localhost:4200/students**
+
+Das Frontend verbindet sich automatisch mit dem Backend auf `http://localhost:8081`.
 
 ---
 
 ## Tests ausführen
 
-Alle Befehle aus dem Ordner `automation-testing` ausführen.
-
-**Übung 2 und 3** benötigen laufende Server. Backend zuerst in einem separaten Terminal starten:
-
-```bash
-make start-backend
-# wartet bis "Started StudentApplication" erscheint
-```
-
-Für E2E zusätzlich das Frontend in einem weiteren Terminal:
-
-```bash
-cd spring-boot-angular-basic-lw2/src/main/js/my-app && npm start
-```
+**Übung 2** benötigt Backend und Frontend. **Übung 3** nur das Backend (siehe Setup oben).
 
 Dann die Tests ausführen:
 
