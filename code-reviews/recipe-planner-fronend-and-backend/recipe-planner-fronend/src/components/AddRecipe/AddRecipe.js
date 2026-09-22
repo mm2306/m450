@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import './AddRecipe.css';
 import {useForm} from "react-hook-form";
 import {Alert, Button, Col, Form, Row} from 'react-bootstrap';
@@ -11,9 +11,10 @@ function AddRecipe() {
     const [ingredientList, setIngredientList] = useState([]);
     const [submitState, setSubmitState] = useState({submitting: false, error: '', success: false});
     const {register, handleSubmit, formState: {errors}, reset} = useForm();
+    const nextListId = useRef(1);
 
     const addIngredient = () => {
-        setIngredientList([...ingredientList, {listId: Date.now(), name: '', unit: 'PIECE', amount: ''}]);
+        setIngredientList([...ingredientList, {listId: nextListId.current++, name: '', unit: 'PIECE', amount: ''}]);
     };
 
     const updateIngredient = (updatedIngredient) => {
@@ -31,7 +32,10 @@ function AddRecipe() {
             name: formValues.name,
             description: formValues.description,
             imageUrl: formValues.imageUrl,
-            ingredients: ingredientList.map(({listId, ...ingredient}) => ingredient),
+            ingredients: ingredientList.map(({listId, ...ingredient}) => ({
+                ...ingredient,
+                amount: ingredient.amount === '' ? 0 : ingredient.amount,
+            })),
         };
         setSubmitState({submitting: true, error: '', success: false});
         try {
@@ -53,7 +57,7 @@ function AddRecipe() {
                         <Form.Label>Recipe Name:</Form.Label>
                         <Form.Control
                             placeholder="Name"
-                            {...register('name', {required: 'Ein Name ist erforderlich'})}
+                            {...register('name', {required: 'Recipe name is required'})}
                             isInvalid={!!errors.name}
                         />
                         <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
@@ -101,7 +105,7 @@ function AddRecipe() {
                     </Row>
 
                     {submitState.error && <Alert variant="danger" className="mt-3">{submitState.error}</Alert>}
-                    {submitState.success && <Alert variant="success" className="mt-3">Recipe wurde erstellt.</Alert>}
+                    {submitState.success && <Alert variant="success" className="mt-3">Recipe created successfully.</Alert>}
 
                     <Button
                         variant="primary"
