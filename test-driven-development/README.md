@@ -16,14 +16,13 @@ PHPUnit wird in der IDE bzw. auf dem Entwicklungsserver installiert:
 * **Alternativ ohne IDE**: PHPUnit als phar herunterladen:
   ```bash
   wget https://phar.phpunit.de/phpunit-5.7.phar -O phpunit.phar
-  php phpunit.phar --version
   ```
 
 ---
 
 ## Aufgabe 2: Methoden implementieren
 
-Das ZIP `FancyApp.zip` wurde entpackt und die Methoden der Klasse `MyFancyClass` so implementiert, dass alle Unit-Tests grün werden.
+FancyApp vom ZIP `FancyApp.zip` wurde entpackt und die Methoden der Klasse `MyFancyClass` so implementiert, dass alle Unit-Tests grün werden.
 
 ### Struktur
 
@@ -38,8 +37,7 @@ FancyApp/
 ### Ausführung
 
 ```bash
-cd FancyApp/Testcases
-php ../phpunit.phar Test.php
+docker run --rm -v $(pwd):/app:z -w /app/FancyApp/Testcases php:7.1-cli php /app/phpunit.phar Test.php
 ```
 
 **Ergebnis:** `OK (3 tests, 27 assertions)` – alle Testcases bestehen.
@@ -121,7 +119,7 @@ public function getOpposite($value, $delimiter = ',') {
 
 ## Aufgabe 3: Auswerten
 
-Vergleich unserer Lösung mit den anderen Gruppen via Text-Compare-Tool (z. B. Diff in der IDE, Beyond Compare, `diff`).
+Vergleich meiner Lösung mit den anderen via text diff.
 
 **Vergleichspunkte, die zu prüfen sind:**
 * Wurden dieselben Funktionen (`mb_strlen`/`mb_substr` vs. `strlen`/`substr`) verwendet?
@@ -132,3 +130,5 @@ Vergleich unserer Lösung mit den anderen Gruppen via Text-Compare-Tool (z. B. D
 * Bei `shortString()` führt die Verwendung von `strlen()` statt `mb_strlen()` zu falschen Ergebnissen bei Umlauten.
 * Bei `calcAverage()` fehlende Validierung der Werte (gibt dann `false` nicht zurück) würde Tests rot machen.
 * Andere Delimiter-Handhabung bei `getOpposite()` (z. B. Trimmen von Leerzeichen) ändert das Verhalten.
+
+Ich konnte meine Lösung nicht mit anderen abgleichen.
