@@ -32,9 +32,48 @@ Beide Tests verwenden **AssertJ SoftAssertions** aus `org.assertj.core.api.SoftA
 
 **Vorteil von SoftAssertions:** Alle Assertions eines Tests werden ausgeführt und die **gesamten Fehler gesammelt** mit `assertAll()` gemeldet. Mit den normalen Assertions bricht der Test nach dem **ersten** Fehlschlag ab. Dadurch sieht man z.B. in einem einzigen Mapper-Test sofort, *alle* Felder, die falsch gemappt wurden – und nicht nur das erste.
 
+### Ausführen
+
+```bash
+cd ci-cd-pipeline/recipe-planner-backend
+mvn clean test                              # alle Unit-Tests
+mvn test -Dtest=RecipeControllerTest        # nur ein Test
+```
+
 ---
 
 ## Aufgabe 2 – Reports
+
+### Was sind Surefire und JaCoCo? (auf einen Blick)
+
+| | **Surefire** | **JaCoCo** |
+|---|---|---|
+| **Wer?** | `maven-surefire-plugin` (Maven-Standard, bereits im Spring Boot Parent) | `jacoco-maven-plugin` (muss in `pom.xml` ergänzt werden) |
+| **Was?** | Test-Runner: führt die JUnit-Tests aus und protokolliert das **Ergebnis** (bestanden/fehlgeschlagen, Dauer, Exceptions) | Coverage-Analyse: misst, **welcher Codeanteil** von den Tests ausgeführt wurde |
+| **Wann?** | läuft in der Maven-Phase `test` | `prepare-agent` vor dem Testlauf, `report` in der Phase `test` |
+| **Output** | `target/surefire-reports/` (XML pro Klasse + Text-Log) | `target/site/jacoco/index.html` (+ XML/CSV) |
+| **Frage, die er beantwortet** | „Bestehen alle Tests?" | „Wurde der Code auch wirklich getestet?" |
+
+**So funktionieren sie zusammen:**
+
+```text
+mvn test
+   │
+   ├─ 1. JaCoCo prepare-agent   → Java-Agent starten, der CPU-Instruktionen
+   │                              und Zeilen der laufenden Tests zählt
+   │
+   ├─ 2. Surefire               → führt die Tests aus (@Test-Methoden),
+   │                              schreibt Ergebnis pro Testklasse nach
+   │                              target/surefire-reports/TEST-*.xml
+   │
+   └─ 3. JaCoCo report          → wertet die Zähldaten des Agents aus und
+                                  erzeugt den Coverage-Report
+                                  target/site/jacoco/index.html
+```
+
+* **Surefire** ist der *Runner*: Er startet JUnit, wertet Assertions aus und meldet jeden Test als `PASS`/`FAIL` – das ist die Grundlage, ob die Pipeline grün ist.
+* **JaCoCo** ist der *Beobachter*: `prepare-agent` hängt als Java-Agent an die JVM und zeichnet auf, welche Klassen/Zeilen/Instruktionen während der Tests tatsächlich liefen. Nach dem Lauf liest `report` diese Daten aus und rendert die Coverage (z.B. 95 % Instruktionen, 90 % Zeilen).
+* Fällt ein Test aus, erzeugt Surefire den Fehlerreport; fehlt Code in der Coverage, zeigt JaCoCo die betroffenen Zeilen rot – beide Reports sind damit komplementäre Qualitätsaussagen.
 
 Zwei sichtbare Berichte werden bei jedem Testlauf automatisch erzeugt:
 
@@ -51,6 +90,18 @@ Konfiguration in `recipe-planner-backend/pom.xml`:
   * `report` gebunden an die **Test-Phase** – so entsteht schon nach `mvn test` die Coverage `target/site/jacoco/index.html`.
 
 Beim Lauf der 9 Unit-Tests: **95 % Instruction-Coverage, ~90 % Line-Coverage**.
+
+### Ausführen
+
+```bash
+cd ci-cd-pipeline/recipe-planner-backend
+mvn clean test            # Tests ausführen + Reports erzeugen
+```
+
+Danach die Reports öffnen:
+
+* Surefire: `target/surefire-reports/`
+* JaCoCo: `target/site/jacoco/index.html` (im Browser öffnen)
 
 ---
 
